@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('title')
-    Home{!! View::hasSection('home-title') ? ' :: ' . trim(View::getSection('home-title')) : '' !!}
+@section('title') 
+    Home :: 
+    @yield('home-title')
 @endsection
 
 @section('sidebar')
@@ -13,5 +14,5 @@
 @endsection
 
 @section('scripts')
-    @parent
+@parent
 @endsection

@@ -1,6 +1,10 @@
 <script>
     $(document).ready(function() {
         $('#userSelect').selectize();
+        $( "#datepicker" ).datetimepicker({
+            dateFormat: "yy-mm-dd",
+            timeFormat: 'HH:mm:ss',
+        });
         // Resell options /////////////////////////////////////////////////////////////////////////////
 
         var $resellable = $('#resellable');
@@ -17,7 +21,7 @@
         });
 
         function updateOptions() {
-            if (resellable) $resellOptions.removeClass('hide');
+            if(resellable) $resellOptions.removeClass('hide');
             else $resellOptions.addClass('hide');
         }
     });

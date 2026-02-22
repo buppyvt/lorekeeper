@@ -2,16 +2,19 @@
 
 namespace App\Models\User;
 
+use Config;
 use App\Models\Model;
 
-class UserAlias extends Model {
+class UserAlias extends Model
+{
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'user_id', 'site', 'alias', 'is_visible', 'is_primary_alias', 'user_snowflake',
+        'user_id', 'site', 'alias', 'is_visible', 'is_primary_alias'
     ];
 
     /**
@@ -25,29 +28,30 @@ class UserAlias extends Model {
 
         RELATIONS
 
-     **********************************************************************************************/
+    **********************************************************************************************/
 
     /**
      * Get the user this set of settings belongs to.
      */
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id');
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User\User', 'user_id');
     }
 
     /**********************************************************************************************
 
         SCOPES
 
-     **********************************************************************************************/
+    **********************************************************************************************/
 
     /**
      * Scope a query to only include visible aliases.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeVisible($query) {
+    public function scopeVisible($query)
+    {
         return $query->where('is_visible', 1);
     }
 
@@ -55,21 +59,17 @@ class UserAlias extends Model {
 
         ACCESSORS
 
-     **********************************************************************************************/
+    **********************************************************************************************/
 
     /**
      * Gets the URL for the user's account on a given site.
      *
      * @return string
      */
-    public function getUrlAttribute() {
-        if ($this->site == 'tumblr') {
-            return 'https://'.$this->alias.'.'.config('lorekeeper.sites.tumblr.link');
-        } elseif ($this->site == 'discord') {
-            return null;
-        } else {
-            return 'https://'.config('lorekeeper.sites.'.$this->site.'.link').'/'.$this->alias;
-        }
+    public function getUrlAttribute()
+    {
+        if($this->site == 'tumblr') return 'https://'.$this->alias.Config::get('lorekeeper.sites.tumblr.link');
+        else return 'https://'.Config::get('lorekeeper.sites.'.$this->site.'.link').'/'.$this->alias;
     }
 
     /**
@@ -77,12 +77,9 @@ class UserAlias extends Model {
      *
      * @return string
      */
-    public function getDisplayAliasAttribute() {
-        if ($this->site == 'discord') {
-            return '<span>'.$this->alias.'@'.$this->siteDisplayName.'</span>';
-        } else {
-            return '<a href="'.$this->url.'">'.$this->alias.'@'.$this->siteDisplayName.'</a>';
-        }
+    public function getDisplayAliasAttribute()
+    {
+        return '<a href="'.$this->url.'">'.$this->alias.'@'.$this->siteDisplayName.'</a>';
     }
 
     /**
@@ -90,8 +87,9 @@ class UserAlias extends Model {
      *
      * @return string
      */
-    public function getConfigAttribute() {
-        return config('lorekeeper.sites.'.$this->site);
+    public function getConfigAttribute()
+    {
+        return Config::get('lorekeeper.sites.' . $this->site);
     }
 
     /**
@@ -99,8 +97,9 @@ class UserAlias extends Model {
      *
      * @return string
      */
-    public function getSiteDisplayNameAttribute() {
-        return config('lorekeeper.sites.'.$this->site.'.display_name');
+    public function getSiteDisplayNameAttribute()
+    {
+        return Config::get('lorekeeper.sites.' . $this->site . '.display_name');
     }
 
     /**
@@ -108,7 +107,8 @@ class UserAlias extends Model {
      *
      * @return string
      */
-    public function getCanMakePrimaryAttribute() {
-        return config('lorekeeper.sites.'.$this->site.'.primary_alias');
+    public function getCanMakePrimaryAttribute()
+    {
+        return Config::get('lorekeeper.sites.' . $this->site . '.primary_alias');
     }
 }

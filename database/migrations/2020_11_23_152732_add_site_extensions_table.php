@@ -1,14 +1,18 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class AddSiteExtensionsTable extends Migration {
+class AddSiteExtensionsTable extends Migration
+{
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::create('site_extensions', function (Blueprint $table) {
             $table->engine = 'InnoDB';
 
@@ -21,8 +25,11 @@ class AddSiteExtensionsTable extends Migration {
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::dropIfExists('site_extensions');
     }
 }

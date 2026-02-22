@@ -9,22 +9,24 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider {
+class AppServiceProvider extends ServiceProvider
+{
     /**
      * Register any application services.
      */
-    public function register() {
+    public function register()
+    {
         //
     }
 
     /**
      * Bootstrap any application services.
      */
-    public function boot() {
+    public function boot()
+    {
         //
         Schema::defaultStringLength(191);
-        Paginator::defaultView('layouts._pagination');
-        Paginator::defaultSimpleView('layouts._simple-pagination');
+        Paginator::useBootstrap();
 
         /*
          * Paginate a standard Laravel Collection.
@@ -56,7 +58,8 @@ class AppServiceProvider extends ServiceProvider {
     /**
      * Boot Toyhouse Socialite provider.
      */
-    private function bootToyhouseSocialite() {
+    private function bootToyhouseSocialite()
+    {
         $socialite = $this->app->make('Laravel\Socialite\Contracts\Factory');
         $socialite->extend(
             'toyhouse',

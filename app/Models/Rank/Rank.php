@@ -2,17 +2,20 @@
 
 namespace App\Models\Rank;
 
+use Config;
 use App\Models\Model;
 use Illuminate\Support\Arr;
 
-class Rank extends Model {
+class Rank extends Model
+{
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'parsed_description', 'sort', 'color', 'icon',
+        'name', 'description', 'parsed_description', 'sort', 'color', 'icon'
     ];
 
     /**
@@ -21,20 +24,21 @@ class Rank extends Model {
      * @var string
      */
     protected $table = 'ranks';
+    
     /**
      * Validation rules for ranks.
      *
      * @var array
      */
     public static $rules = [
-        'name'        => 'required|between:3,100',
+        'name' => 'required|between:3,100',
         'description' => 'nullable',
-        'color'       => 'nullable|regex:/^#?[0-9a-fA-F]{6}$/i',
-        'icon'        => 'nullable',
+        'color' => 'nullable|regex:/^#?[0-9a-fA-F]{6}$/i',
+        'icon' => 'nullable'
     ];
 
     /**********************************************************************************************
-
+    
         RELATIONS
 
     **********************************************************************************************/
@@ -42,12 +46,13 @@ class Rank extends Model {
     /**
      * Get the powers attached to this rank.
      */
-    public function powers() {
-        return $this->hasMany(RankPower::class);
+    public function powers() 
+    {
+        return $this->hasMany('App\Models\Rank\RankPower');
     }
 
     /**********************************************************************************************
-
+    
         ACCESSORS
 
     **********************************************************************************************/
@@ -57,11 +62,9 @@ class Rank extends Model {
      *
      * @return string
      */
-    public function getDisplayNameAttribute() {
-        if ($this->color) {
-            return '<strong style="color: #'.$this->color.'">'.$this->name.'</strong>';
-        }
-
+    public function getDisplayNameAttribute() 
+    {
+        if($this->color) return '<strong style="color: #'.$this->color.'">'.$this->name.'</strong>';
         return $this->name;
     }
 
@@ -70,16 +73,14 @@ class Rank extends Model {
      *
      * @return bool
      */
-    public function getIsAdminAttribute() {
-        if ($this->id == self::orderBy('sort', 'DESC')->first()->id) {
-            return true;
-        }
-
+    public function getIsAdminAttribute()
+    {
+        if($this->id == Rank::orderBy('sort', 'DESC')->first()->id) return true;
         return false;
     }
 
     /**********************************************************************************************
-
+    
         OTHER FUNCTIONS
 
     **********************************************************************************************/
@@ -87,43 +88,32 @@ class Rank extends Model {
     /**
      * Checks if the current rank is high enough to edit a given rank.
      *
-     * @param \App\Models\Rank\Rank $rank
-     *
+     * @param  \App\Models\Rank\Rank $rank
      * @return int
      */
-    public function canEditRank($rank) {
-        if (is_numeric($rank)) {
-            $rank = self::find($rank);
-        }
-        if ($this->hasPower('edit_ranks')) {
-            if ($this->isAdmin) {
-                if ($rank->id != $this->id) {
-                    return 1;
-                } // can edit everything
-                else {
-                    return 2;
-                } // limited edit: cannot edit sort order/powers
-            } elseif ($this->sort > $rank->sort) {
-                return 1;
+    public function canEditRank($rank)
+    {
+        if(is_numeric($rank)) $rank = Rank::find($rank);
+        if($this->hasPower('edit_ranks')) {
+            if($this->isAdmin) {
+                if($rank->id != $this->id) return 1; // can edit everything
+                else return 2; // limited edit: cannot edit sort order/powers
             }
+            else if ($this->sort > $rank->sort) return 1;
         }
-
         return 0;
     }
 
     /**
      * Checks if the rank has a given power.
      *
-     * @param \App\Models\Rank\RankPower $power
-     *
+     * @param  \App\Models\Rank\RankPower $power
      * @return bool
      */
-    public function hasPower($power) {
-        if ($this->isAdmin) {
-            return true;
-        }
-
-        return $this->powers()->where('power', $power)->exists();
+    public function hasPower($power)
+    {
+        if($this->isAdmin) return true;
+        return $this->powers()->where('power', $power)->exists(); 
     }
 
     /**
@@ -131,12 +121,10 @@ class Rank extends Model {
      *
      * @return array
      */
-    public function getPowers() {
-        if ($this->isAdmin) {
-            return config('lorekeeper.powers');
-        }
+    public function getPowers()
+    {
+        if($this->isAdmin) return Config::get('lorekeeper.powers');
         $powers = $this->powers->pluck('power')->toArray();
-
-        return Arr::only(config('lorekeeper.powers'), $powers);
+        return Arr::only(Config::get('lorekeeper.powers'), $powers);
     }
 }

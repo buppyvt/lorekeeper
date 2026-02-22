@@ -1,12 +1,16 @@
-<?php
+<?php namespace App\Services;
 
-namespace App\Services;
+use App\Services\Service;
 
-use App\Models\Rank\Rank;
+use DB;
+use Config;
+
 use App\Models\User\User;
-use Illuminate\Support\Facades\DB;
+use App\Models\Rank\Rank;
+use App\Models\Rank\RankPower;
 
-class RankService extends Service {
+class RankService extends Service
+{
     /*
     |--------------------------------------------------------------------------
     | Rank Service
@@ -19,26 +23,22 @@ class RankService extends Service {
     /**
      * Creates a user rank.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
-     *
+     * @param  array                  $data
+     * @param  \App\Models\User\User  $user
      * @return bool
      */
-    public function createRank($data, $user) {
+    public function createRank($data, $user)
+    {
         DB::beginTransaction();
 
         try {
             // More specific validation
-            if (Rank::where('name', $data['name'])->exists()) {
-                throw new \Exception('A rank with the given name already exists.');
-            }
+            if(Rank::where('name', $data['name'])->exists()) throw new \Exception("A rank with the given name already exists.");
 
             $powers = null;
-            if (isset($data['powers'])) {
-                foreach ($data['powers'] as $power) {
-                    if (!config('lorekeeper.powers.'.$power)) {
-                        throw new \Exception('Invalid power selected.');
-                    }
+            if(isset($data['powers'])) {
+                foreach($data['powers'] as $power) {
+                    if(!Config::get('lorekeeper.powers.'.$power)) throw new \Exception("Invalid power selected.");
                 }
 
                 $powers = array_unique($data['powers']);
@@ -52,53 +52,40 @@ class RankService extends Service {
             Rank::where('sort', '>=', $data['sort'])->increment('sort');
 
             $data['color'] = isset($data['color']) ? str_replace('#', '', $data['color']) : null;
-            if (isset($data['description']) && $data['description']) {
-                $data['parsed_description'] = parse($data['description']);
-            } else {
-                $data['parsed_description'] = null;
-            }
+            if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
 
-            $data['icon'] ??= 'fas fa-user';
+            $data['icon'] = isset($data['icon']) ? $data['icon'] : 'fas fa-user';
 
             $rank = Rank::create($data);
-            if ($powers) {
-                foreach ($powers as $power) {
-                    DB::table('rank_powers')->insert(['rank_id' => $rank->id, 'power' => $power]);
-                }
-            }
+            if($powers) foreach($powers as $power) DB::table('rank_powers')->insert(['rank_id' => $rank->id, 'power' => $power]);
 
             return $this->commitReturn(true);
-        } catch (\Exception $e) {
+        } catch(\Exception $e) { 
             $this->setError('error', $e->getMessage());
         }
-
         return $this->rollbackReturn(false);
     }
 
     /**
      * Updates a user rank.
      *
-     * @param \App\Models\Rank\Rank $rank
-     * @param array                 $data
-     * @param \App\Models\User\User $user
-     *
+     * @param  \App\Models\Rank\Rank  $rank
+     * @param  array                  $data
+     * @param  \App\Models\User\User  $user
      * @return bool
      */
-    public function updateRank($rank, $data, $user) {
+    public function updateRank($rank, $data, $user)
+    {
         DB::beginTransaction();
 
         try {
             // More specific validation
-            if (Rank::where('name', $data['name'])->where('id', '!=', $rank->id)->exists()) {
-                throw new \Exception('A rank with the given name already exists.');
-            }
+            if(Rank::where('name', $data['name'])->where('id', '!=', $rank->id)->exists()) throw new \Exception("A rank with the given name already exists.");
 
             $powers = null;
-            if (isset($data['powers'])) {
-                foreach ($data['powers'] as $power) {
-                    if (!config('lorekeeper.powers.'.$power)) {
-                        throw new \Exception('Invalid power selected.');
-                    }
+            if(isset($data['powers'])) {
+                foreach($data['powers'] as $power) {
+                    if(!Config::get('lorekeeper.powers.'.$power)) throw new \Exception("Invalid power selected.");
                 }
 
                 $powers = array_unique($data['powers']);
@@ -106,67 +93,57 @@ class RankService extends Service {
             }
 
             $data['color'] = isset($data['color']) ? str_replace('#', '', $data['color']) : null;
-            if (isset($data['description']) && $data['description']) {
-                $data['parsed_description'] = parse($data['description']);
-            } else {
-                $data['parsed_description'] = null;
-            }
+            if(isset($data['description']) && $data['description']) $data['parsed_description'] = parse($data['description']);
 
-            $data['icon'] ??= 'fas fa-user';
+            $data['icon'] = isset($data['icon']) ? $data['icon'] : 'fas fa-user';
 
             $rank->update($data);
-            $rank->powers()->delete();
-            if ($powers) {
-                foreach ($powers as $power) {
-                    DB::table('rank_powers')->insert(['rank_id' => $rank->id, 'power' => $power]);
-                }
+            if($powers) {
+                $rank->powers()->delete();
+                foreach($powers as $power) DB::table('rank_powers')->insert(['rank_id' => $rank->id, 'power' => $power]);
             }
 
             return $this->commitReturn(true);
-        } catch (\Exception $e) {
+        } catch(\Exception $e) { 
             $this->setError('error', $e->getMessage());
         }
-
         return $this->rollbackReturn(false);
     }
 
     /**
      * Deletes a user rank.
      *
-     * @param \App\Models\Rank\Rank $rank
-     * @param \App\Models\User\User $user
-     *
+     * @param  \App\Models\Rank\Rank  $rank
+     * @param  \App\Models\User\User  $user
      * @return bool
      */
-    public function deleteRank($rank, $user) {
+    public function deleteRank($rank, $user)
+    {
         DB::beginTransaction();
 
         try {
             // Disallow deletion of ranks that are currently assigned to users
-            if (User::where('rank_id', $rank->id)->exists()) {
-                throw new \Exception('There are currently user(s) with the selected rank. Please change their rank before deleting this one.');
-            }
+            if(User::where('rank_id', $rank->id)->exists()) throw new \Exception("There are currently user(s) with the selected rank. Please change their rank before deleting this one.");
 
             $rank->powers()->delete();
             $rank->delete();
 
             return $this->commitReturn(true);
-        } catch (\Exception $e) {
+        } catch(\Exception $e) { 
             $this->setError('error', $e->getMessage());
         }
-
         return $this->rollbackReturn(false);
     }
 
     /**
      * Sorts user ranks.
      *
-     * @param array                 $data
-     * @param \App\Models\User\User $user
-     *
+     * @param  array                  $data
+     * @param  \App\Models\User\User  $user
      * @return bool
      */
-    public function sortRanks($data, $user) {
+    public function sortRanks($data, $user)
+    {
         DB::beginTransaction();
 
         try {
@@ -176,13 +153,9 @@ class RankService extends Service {
             // Check if the array contains the admin rank, or anything non-numeric
             $adminRank = Rank::orderBy('sort', 'DESC')->first();
             $count = 0;
-            foreach ($sort as $key => $s) {
-                if (!is_numeric($s) || !is_numeric($key)) {
-                    throw new \Exception('Invalid sort order.');
-                }
-                if ($s == $adminRank->id) {
-                    throw new \Exception('Sort order of admin rank cannot be changed.');
-                }
+            foreach($sort as $key => $s) {
+                if(!is_numeric($s) || !is_numeric($key)) throw new \Exception("Invalid sort order.");
+                if($s == $adminRank->id) throw new \Exception("Sort order of admin rank cannot be changed.");
 
                 Rank::where('id', $s)->update(['sort' => $key]);
                 $count++;
@@ -190,10 +163,9 @@ class RankService extends Service {
             $adminRank->update(['sort'=> $count]);
 
             return $this->commitReturn(true);
-        } catch (\Exception $e) {
+        } catch(\Exception $e) { 
             $this->setError('error', $e->getMessage());
         }
-
         return $this->rollbackReturn(false);
     }
 }

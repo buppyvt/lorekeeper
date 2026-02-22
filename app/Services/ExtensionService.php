@@ -1,11 +1,14 @@
-<?php
+<?php namespace App\Services;
 
-namespace App\Services;
+use App\Services\Service;
+
+use DB;
+use Config;
 
 use App\Models\Notification;
-use Illuminate\Support\Facades\DB;
 
-class ExtensionService extends Service {
+class ExtensionService extends Service
+{
     /*
     |--------------------------------------------------------------------------
     | Extension Service
@@ -22,23 +25,21 @@ class ExtensionService extends Service {
      * Should be called with a command instructing it
      * in what notifications to move where.
      *
-     * @param mixed $source
-     * @param mixed $destination
-     *
+     * @param  $data
      * @return bool
      */
-    public function updateNotifications($source, $destination) {
+    public function updateNotifications($source, $destination)
+    {
         $count = Notification::where('notification_type_id', $source)->count();
-        if ($count && isset($destination)) {
+        if($count && isset($destination)) {
             DB::beginTransaction();
             try {
                 Notification::where('notification_type_id', $source)->update(['notification_type_id' => $destination]);
 
                 return $this->commitReturn(true);
-            } catch (\Exception $e) {
+            } catch(\Exception $e) { 
                 $this->setError('error', $e->getMessage());
             }
-
             return $this->rollbackReturn(false);
         }
     }

@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('title')
-    World{!! View::hasSection('world-title') ? ' :: ' . trim(View::getSection('world-title')) : '' !!}
+@section('title') 
+    World :: 
+    @yield('world-title')
 @endsection
 
 @section('sidebar')
@@ -13,5 +14,5 @@
 @endsection
 
 @section('scripts')
-    @parent
+@parent
 @endsection

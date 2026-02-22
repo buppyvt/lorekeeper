@@ -2,17 +2,21 @@
 
 namespace App\Models\Character;
 
-use App\Models\Feature\Feature;
+use Config;
+use DB;
 use App\Models\Model;
+use App\Models\Character\CharacterCategory;
 
-class CharacterFeature extends Model {
+class CharacterFeature extends Model
+{
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'character_image_id', 'feature_id', 'data', 'character_type',
+        'character_image_id', 'feature_id', 'data', 'character_type'
     ];
 
     /**
@@ -20,17 +24,10 @@ class CharacterFeature extends Model {
      *
      * @var string
      */
-    protected $table = 'character_features';
-
-    /**
-     * The relationships that should always be loaded.
-     *
-     * @var array
-     */
-    protected $with = ['feature'];
-
+    protected $table = 'character_features';    
+    
     /**********************************************************************************************
-
+    
         RELATIONS
 
     **********************************************************************************************/
@@ -38,14 +35,16 @@ class CharacterFeature extends Model {
     /**
      * Get the image associated with this record.
      */
-    public function image() {
-        return $this->belongsTo(CharacterImage::class, 'character_image_id');
+    public function image() 
+    {
+        return $this->belongsTo('App\Models\Character\CharacterImage', 'character_image_id');
     }
-
+    
     /**
      * Get the feature (character trait) associated with this record.
      */
-    public function feature() {
-        return $this->belongsTo(Feature::class, 'feature_id');
+    public function feature() 
+    {
+        return $this->belongsTo('App\Models\Feature\Feature', 'feature_id');
     }
 }

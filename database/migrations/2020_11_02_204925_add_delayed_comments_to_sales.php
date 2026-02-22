@@ -1,14 +1,18 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class AddDelayedCommentsToSales extends Migration {
+class AddDelayedCommentsToSales extends Migration
+{
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::table('sales', function (Blueprint $table) {
             $table->timestamp('comments_open_at')->nullable()->default(null);
             $table->boolean('is_open')->default(1);
@@ -17,8 +21,11 @@ class AddDelayedCommentsToSales extends Migration {
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::table('sales', function (Blueprint $table) {
             //
             $table->dropColumn('is_open');

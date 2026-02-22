@@ -7,12 +7,9 @@ use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 use Laravel\Socialite\Two\User;
 
-class ToyhouseProvider extends AbstractProvider implements ProviderInterface {
+class ToyhouseProvider extends AbstractProvider implements ProviderInterface
+{
     protected $scopes = [];
-
-    public function getRedirectUrl() {
-        return $this->redirectUrl;
-    }
 
     /**
      * Get the authentication URL for the provider.
@@ -21,7 +18,8 @@ class ToyhouseProvider extends AbstractProvider implements ProviderInterface {
      *
      * @return string
      */
-    protected function getAuthUrl($state) {
+    protected function getAuthUrl($state)
+    {
         return $this->buildAuthUrlFromBase('https://toyhou.se/~oauth/authorize', $state);
     }
 
@@ -30,7 +28,8 @@ class ToyhouseProvider extends AbstractProvider implements ProviderInterface {
      *
      * @return string
      */
-    protected function getTokenUrl() {
+    protected function getTokenUrl()
+    {
         return 'https://toyhou.se/~oauth/token';
     }
 
@@ -41,7 +40,8 @@ class ToyhouseProvider extends AbstractProvider implements ProviderInterface {
      *
      * @return array
      */
-    protected function getUserByToken($token) {
+    protected function getUserByToken($token)
+    {
         $response = $this->getHttpClient()->get(
             'https://toyhou.se/~api/v1/me',
             [
@@ -59,7 +59,8 @@ class ToyhouseProvider extends AbstractProvider implements ProviderInterface {
      *
      * @return \Laravel\Socialite\Two\User
      */
-    protected function mapUserToObject(array $user) {
+    protected function mapUserToObject(array $user)
+    {
         return (new User)->setRaw($user)->map([
             'id'   => $user['id'], 'nickname' => $user['username'],
             'name' => null, 'email' => null, 'avatar' => $user['avatar'],

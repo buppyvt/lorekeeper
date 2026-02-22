@@ -1,13 +1,16 @@
-@extends('news.layout')
+@extends('layouts.app')
 
-@section('news-title')
-    {{ $news->title }}
-@endsection
+@section('title') {{ $news->title }} @endsection
 
-@section('news-content')
+@section('content')
     {!! breadcrumbs(['Site News' => 'news', $news->title => $news->url]) !!}
-    @include('news._news', ['news' => $news, 'page' => true])
-    <hr class="mb-5" />
+    @include('news._news', ['news' => $news, 'page' => TRUE])
+<hr>
+<br><br>
 
-    @comments(['model' => $news, 'perPage' => 5])
+@comments(['model' => $news,
+        'perPage' => 5
+    ])
+
 @endsection
+    
