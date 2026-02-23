@@ -50,7 +50,7 @@ class ThemeController extends Controller {
         }
 
         return view('admin.themes.themes', [
-            'themes' => $query->paginate(20)->appends($request->query()),
+            'siteThemes' => $query->paginate(20)->appends($request->query()),
         ]);
     }
 
