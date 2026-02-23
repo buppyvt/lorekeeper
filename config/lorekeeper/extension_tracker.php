@@ -11,7 +11,6 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
-<<<<<<< HEAD
 
 
 
@@ -25,6 +24,7 @@ return [
         ]),
         'version' => '2.0.0', // Big update with Cylunny's Theme manager + Moif's work merging the two!
     ],
+   
     'world_expansion' => [
         'key' => 'world_expansion',
         'wiki_key' => 'World_Expansion',
@@ -34,12 +34,8 @@ return [
         ]),
         'version' => '1.3.2',
     ],
-
-
-];
-=======
-    
-	'liveclock' => [
+	
+    'liveclock' => [
          'key' => 'liveclock',
          'wiki_key' => 'LiveClock',
          'creators' => json_encode([
@@ -48,4 +44,3 @@ return [
          'version' => '1.0.2',
      ],
 ];
->>>>>>> b2f07e83817bd0a0825bb0732826ffdc597e3c45

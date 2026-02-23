@@ -261,9 +261,6 @@
                 $('.spoiler-toggle').click(function() {
                     $(this).next().toggle();
                 });
-<<<<<<< HEAD
-            });
-=======
 				
 			function LiveClockJS(){
 				var date = new Date();
@@ -292,7 +289,6 @@
 			}
 			
 			LiveClockJS();
->>>>>>> b2f07e83817bd0a0825bb0732826ffdc597e3c45
         </script>
     </div>
 </body>
