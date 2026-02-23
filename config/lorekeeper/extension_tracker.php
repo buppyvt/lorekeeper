@@ -11,6 +11,7 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
+<<<<<<< HEAD
 
 
 
@@ -36,3 +37,15 @@ return [
 
 
 ];
+=======
+    
+	'liveclock' => [
+         'key' => 'liveclock',
+         'wiki_key' => 'LiveClock',
+         'creators' => json_encode([
+            'Speedy' => 'https://github.com/SpeedyD/',
+         ]),
+         'version' => '1.0.2',
+     ],
+];
+>>>>>>> b2f07e83817bd0a0825bb0732826ffdc597e3c45

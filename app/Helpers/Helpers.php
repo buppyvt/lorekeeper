@@ -293,6 +293,7 @@ function prettyProfileName($url)
     else return $url;
 }
 
+<<<<<<< HEAD
 // World Expansion attachments
 function allAttachments($model)
 {
@@ -317,3 +318,16 @@ function allAttachments($model)
     }
     return $totals;
 }
+=======
+/**
+ * Puts down the HTML needed for a LiveClock
+ *
+ * @return string
+ */
+function LiveClock()
+{
+	$LCcode = '<span class="LiveClock" onload="LiveClockJS()"></span>';
+	$LCtz = '<abbr data-toggle="tooltip" title="UTC'.Carbon\Carbon::now()->timezone->toOffsetName().'">' . strtoupper(Carbon\Carbon::now()->timezone->getAbbreviatedName(Carbon\Carbon::now()->isDST())) . '</abbr>';
+	return $LCcode . " " . $LCtz;
+}
+>>>>>>> b2f07e83817bd0a0825bb0732826ffdc597e3c45
