@@ -12,7 +12,6 @@ return [
     //     'version' => '1.0.0',
     // ],
 
-<<<<<<< HEAD
 
 
     'theme_manager' => [
@@ -24,7 +23,7 @@ return [
             'moif' => 'https://toyhou.se/moif'
         ]),
         'version' => '2.0.0', // Big update with Cylunny's Theme manager + Moif's work merging the two!
-=======
+    ],
     'world_expansion' => [
         'key' => 'world_expansion',
         'wiki_key' => 'World_Expansion',
@@ -33,7 +32,6 @@ return [
             'Mercury' => 'https://github.com/itinerare/',
         ]),
         'version' => '1.3.2',
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
     ],
 
 

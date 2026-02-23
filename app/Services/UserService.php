@@ -87,8 +87,6 @@ class UserService extends Service
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Updates a user. Used in modifying the admin user on the command line.
      *
      * @param  array  $data
@@ -162,7 +160,6 @@ class UserService extends Service
     }
 
     /**
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
      * Updates the user's password.
      *
      * @param  array                  $data
@@ -229,7 +226,6 @@ class UserService extends Service
     }
 
     /**
-<<<<<<< HEAD
      * Updates the user's theme.
      *
      * @param  array                  $data
@@ -245,8 +241,6 @@ class UserService extends Service
     }
 
     /**
-=======
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
      * Updates the user's avatar.
      *
      * @param  array                  $data

@@ -14,12 +14,9 @@ use App\Models\User\UserAlias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Notification;
-<<<<<<< HEAD
 use App\Models\ThemeEditor;
-=======
 use App\Models\WorldExpansion\Location;
 use App\Models\WorldExpansion\Faction;
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
 
 use App\Services\UserService;
 use App\Services\LinkService;
@@ -53,7 +50,6 @@ class AccountController extends Controller {
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-<<<<<<< HEAD
     public function getSettings() {
         $user = Auth::user();
 
@@ -67,12 +63,6 @@ class AccountController extends Controller {
 
         $decoratorOptions = ['0' => 'Select Decorator Theme'] + Theme::where('is_active', 1)->where('theme_type', 'decorator')->where('is_user_selectable', 1)->get()->pluck('displayName', 'id')->toArray();
 
-        return view('account.settings', [
-            'themeOptions' => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
-            'decoratorThemes' => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
-=======
-    public function getSettings()
-    {
         $interval = array(
             0 => 'whenever',
             1 => 'yearly',
@@ -82,7 +72,9 @@ class AccountController extends Controller {
             5 => 'daily'
         );
 
-        return view('account.settings',[
+        return view('account.settings', [
+            'themeOptions' => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
+            'decoratorThemes' => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
             'locations' => Location::all()->where('is_user_home')->pluck('style','id')->toArray(),
             'factions' => Faction::all()->where('is_user_faction')->pluck('style','id')->toArray(),
             'user_enabled' => Settings::get('WE_user_locations'),
@@ -90,7 +82,6 @@ class AccountController extends Controller {
             'char_enabled' => Settings::get('WE_character_locations'),
             'char_faction_enabled' => Settings::get('WE_character_factions'),
             'location_interval' => $interval[Settings::get('WE_change_timelimit')]
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
         ]);
     }
 
@@ -125,22 +116,27 @@ class AccountController extends Controller {
     }
 
     /**
-<<<<<<< HEAD
      * Edits the user's theme.
-=======
      * Edits the user's location from a list of locations that users can make their home.
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-<<<<<<< HEAD
     public function postTheme(Request $request, UserService $service) {
         if ($service->updateTheme($request->only(['theme', 'decorator_theme']), Auth::user())) {
             flash('Theme updated successfully.')->success();
         } else {
             foreach ($service->errors()->getMessages()['error'] as $error) flash($error)->error();
-=======
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Edits the user's location from a list of locations that users can make their home.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postLocation(Request $request, UserService $service)
     {
         if($service->updateLocation($request->input('location'), Auth::user())) {
@@ -165,7 +161,6 @@ class AccountController extends Controller {
         }
         else {
             foreach($service->errors()->getMessages()['error'] as $error) flash($error)->error();
->>>>>>> 90ee47a924d14d74c05b147b9a5946aba3fc433b
         }
         return redirect()->back();
     }
