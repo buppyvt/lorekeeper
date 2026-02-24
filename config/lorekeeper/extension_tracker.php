@@ -11,8 +11,6 @@ return [
     //     ]),
     //     'version' => '1.0.0',
     // ],
-<<<<<<< HEAD
-=======
     
     'dailies' => [
         'key' => 'dailies',
@@ -22,7 +20,6 @@ return [
         ]),
         'version' => '2.0.1', 
     ],
->>>>>>> 78d891f79c28232bfafc8f99a33721da53497075
 
 
 

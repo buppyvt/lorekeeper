@@ -241,8 +241,6 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('prompts/create', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/edit/{id?}', 'PromptController@postCreateEditPrompt');
     Route::post('prompts/delete/{id}', 'PromptController@postDeletePrompt');
-<<<<<<< HEAD
-=======
     
     # DAILIES
     Route::get('dailies', 'DailyController@getIndex');
@@ -254,9 +252,7 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('dailies/delete/{id}', 'DailyController@postDeleteDaily');
     Route::post('dailies/sort', 'DailyController@postSortDaily'); 
 });
->>>>>>> 78d891f79c28232bfafc8f99a33721da53497075
 
-});
 
 # PAGES
 Route::group(['prefix' => 'pages', 'middleware' => 'power:edit_pages'], function() {
