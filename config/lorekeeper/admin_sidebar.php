@@ -240,6 +240,10 @@ return [
                 'url' => 'admin/images'
             ],
             [
+                'name' => 'Site Design',
+                'url' => 'admin/design'
+            ],
+            [
                 'name' => 'File Manager',
                 'url' => 'admin/files'
             ],

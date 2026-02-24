@@ -52,4 +52,15 @@ return [
          ]),
          'version' => '1.0.2',
      ],
+
+    
+    'alternate_site_designs' => [
+        'key' => 'alternate_site_designs',
+        'wiki_key' => 'Alternate Site Designs',
+        'creators' => json_encode([
+            'Cylunny' => 'https://toyhou.se/cylunny',
+        ]),
+        'version' => '1.0.0', 
+    ],
+
 ];
