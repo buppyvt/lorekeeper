@@ -294,6 +294,7 @@
 			
 			LiveClockJS();
         </script>
+        @include('js._liveclock')
     </div>
 </body>
 
