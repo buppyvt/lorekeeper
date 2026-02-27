@@ -2,11 +2,15 @@
 
 namespace App\Providers;
 
+use App\Facades\Settings;
+use App\Models\Theme;
 use App\Providers\Socialite\ToyhouseProvider;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider {
@@ -25,6 +29,22 @@ class AppServiceProvider extends ServiceProvider {
         Schema::defaultStringLength(191);
         Paginator::defaultView('layouts._pagination');
         Paginator::defaultSimpleView('layouts._simple-pagination');
+        // Add any other views that require the theme variables below aka anything with tinymce initialization
+        $composerViews = ['layouts.app', 'account.settings', 'character._image_js', 'comments._perma_layout', 'comments.comments', 'js._modal_wysiwyg', 'js._tinymce_wysiwyg'];
+
+        view()->composer($composerViews, function ($view) {
+            $theme = Auth::user()->theme ?? Theme::where('is_default', true)->first() ?? null;
+            $conditionalTheme = null;
+            if (class_exists('\App\Models\Weather\WeatherSeason')) {
+                $conditionalTheme = Theme::where('link_type', 'season')->where('link_id', Settings::get('site_season'))->first() ??
+                Theme::where('link_type', 'weather')->where('link_id', Settings::get('site_weather'))->first() ??
+                $theme;
+            }
+            $decoratorTheme = Auth::user()->decoratorTheme ?? null;
+            View::share('theme', $theme);
+            View::share('conditionalTheme', $conditionalTheme);
+            View::share('decoratorTheme', $decoratorTheme);
+        });
 
         /*
          * Paginate a standard Laravel Collection.

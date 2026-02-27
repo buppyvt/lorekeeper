@@ -71,7 +71,6 @@
     {{-- Bootstrap Toggle --}}
     <link href="{{ asset('css/bootstrap4-toggle.min.css') }}" rel="stylesheet">
 
-
     <link href="{{ asset('css/lightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-colorpicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/jquery-ui-timepicker-addon.css') }}" rel="stylesheet">
@@ -82,18 +81,61 @@
         <link href="{{ asset('css/custom.css') . '?v=' . filemtime(public_path('css/custom.css')) }}" rel="stylesheet">
     @endif
 
+    @if (isset($theme) && $theme?->prioritize_css)
+        @include('layouts.editable_theme')
+    @endif
+    @if (isset($theme) && $theme?->has_css)
+        <style type="text/css" media="screen">
+            @php include_once($theme?->cssUrl)
+            @endphp
+            {{-- css in style tag so that order matters --}}
+        </style>
+    @endif
+    @if (isset($theme) && !$theme?->prioritize_css)
+        @include('layouts.editable_theme')
+    @endif
+
+    {{-- Conditional Themes are dependent on other site features --}}
+    @if (isset($conditionalTheme) && $conditionalTheme?->prioritize_css)
+        @include('layouts.editable_theme', ['theme' => $conditionalTheme])
+    @endif
+    @if (isset($conditionalTheme) && $conditionalTheme?->has_css)
+        <style type="text/css" media="screen">
+            @php include_once($conditionalTheme?->cssUrl)
+            @endphp
+            {{-- css in style tag so that order matters --}}
+        </style>
+    @endif
+    @if (isset($conditionalTheme) && !$conditionalTheme?->prioritize_css)
+        @include('layouts.editable_theme', ['theme' => $conditionalTheme])
+    @endif
+
+    @if (isset($decoratorTheme) && $decoratorTheme?->prioritize_css)
+        @include('layouts.editable_theme', ['theme' => $decoratorTheme])
+    @endif
+    @if (isset($decoratorTheme) && $decoratorTheme?->has_css)
+        <style type="text/css" media="screen">
+            @php include_once($decoratorTheme?->cssUrl)
+            @endphp
+            {{-- css in style tag so that order matters --}}
+        </style>
+    @endif
+    @if (isset($decoratorTheme) && !$decoratorTheme?->prioritize_css)
+        @include('layouts.editable_theme', ['theme' => $decoratorTheme])
+    @endif
+
     @include('feed::links')
 </head>
 
 <body>
     <div id="app">
-        <div class="site-header-image" id="header" style="background-image: url('{{ asset('images/header.png') }}');"></div>
+        <div class="site-header-image" id="header" style="background-image: url('{{ $decoratorTheme?->headerImageUrl ?? ($conditionalTheme?->headerImageUrl ?? ($theme?->headerImageUrl ?? asset('images/header.png'))) }}');"></div>
         @include('layouts._nav')
         @if (View::hasSection('sidebar'))
             <div class="site-mobile-header bg-secondary"><a href="#" class="btn btn-sm btn-outline-light" id="mobileMenuButton">Menu <i class="fas fa-caret-right ml-1"></i></a></div>
         @endif
 
-        <main class="container-fluid">
+        <main class="container-fluid" id="main">
             <div class="row">
 
                 <div class="sidebar col-lg-2" id="sidebar">
@@ -156,7 +198,41 @@
                 $('[data-toggle="tooltip"]').tooltip({
                     html: true
                 });
-                $('.cp').colorpicker();
+
+                class BlurValid extends $.colorpicker.Extension {
+                    constructor(colorpicker, options = {}) {
+                        super(colorpicker, options);
+
+                        if (this.colorpicker.inputHandler.hasInput()) {
+                            const onBlur = function(colorpicker, fallback) {
+                                return () => {
+                                    colorpicker.setValue(colorpicker.blurFallback._original.color);
+                                }
+                            };
+                            this.colorpicker.inputHandler.input[0].addEventListener('blur', onBlur(this.colorpicker));
+                        }
+                    }
+
+                    onInvalid(e) {
+                        const color = this.colorpicker.colorHandler.getFallbackColor();
+                        if (color._original.valid)
+                            this.colorpicker.blurFallback = color;
+                    }
+                }
+
+                $.colorpicker.extensions.blurvalid = BlurValid;
+                console.log($['colorpicker'].extensions);
+
+                $('.cp').colorpicker({
+                    'autoInputFallback': false,
+                    'autoHexInputFallback': false,
+                    'format': 'auto',
+                    'useAlpha': true,
+                    extensions: [{
+                        name: 'blurValid'
+                    }]
+                });
+
                 tinymce.init({
                     selector: '.wysiwyg',
                     height: 500,
@@ -170,8 +246,18 @@
                     toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | spoiler-add spoiler-remove | removeformat | code',
                     content_css: [
                         '{{ asset('css/app.css') }}',
-                        '{{ asset('css/lorekeeper.css') }}'
+                        '{{ asset('css/lorekeeper.css?v=' . filemtime(public_path('css/lorekeeper.css'))) }}',
+                        '{{ asset('css/all.min.css') }}',
+                        {!! file_exists(public_path() . '/css/custom.css') ? "'" . asset('css/custom.css?v=') . filemtime(public_path('css/custom.css')) . "'," : '' !!}
+                        {!! $theme?->cssUrl ? "'" . asset($theme?->cssUrl) . "'," : '' !!}
+                        {!! $conditionalTheme?->cssUrl ? "'" . asset($conditionalTheme?->cssUrl) . "'," : '' !!}
+                        {!! $decoratorTheme?->cssUrl ? "'" . asset($decoratorTheme?->cssUrl) . "'," : '' !!}
                     ],
+                    content_style: `
+                        {!! str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $theme])) !!}
+                        {!! isset($conditionalTheme) && $conditionalTheme ? str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $conditionalTheme])) : '' !!}
+                        {!! isset($decoratorTheme) && $decoratorTheme ? str_replace(['<style>', '</style>'], '', view('layouts.editable_theme', ['theme' => $decoratorTheme])) : '' !!}
+                    `,
                     spoiler_caption: 'Toggle Spoiler',
                     target_list: false
                 });

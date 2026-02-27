@@ -385,13 +385,14 @@ main > .row {
 /* Chrome, Safari, Edge, Opera */
 .pagination-popover input::-webkit-outer-spin-button,
 .pagination-popover input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 .pagination-popover input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .spoiler {
@@ -722,21 +723,21 @@ tr.accountbound {
 
 /* BOOTSTRAP TABLES *************************************************************************************/
 .ubt-bottom {
-  border-bottom:1px solid #dee2e6;
+    border-bottom:1px solid #dee2e6;
 }
 
 .ubt-top {
-  border-top:1px solid #dee2e6;
+    border-top:1px solid #dee2e6;
 }
 
 .ubt-texthide {
-  width:100%;
-  max-width: 250px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-  vertical-align: middle;
+    width:100%;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* COMMENTS *************************************************************************************/
