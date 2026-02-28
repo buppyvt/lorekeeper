@@ -1,6 +1,6 @@
 <h1>Welcome, {!! Auth::user()->displayName !!}!</h1>
 <div class="card mb-4 timestamp">
-    <div class="card-body">
+    <div class="card-body text-center">
         <i class="far fa-clock"></i> {!! LiveClock() !!}
     </div>
 </div>
