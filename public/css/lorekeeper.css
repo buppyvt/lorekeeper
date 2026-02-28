@@ -21,8 +21,8 @@
 
 h1, h2, h3, h4, h5,
 .h1, .h2, .h3, .h4, .h5 {
-    text-transform: uppercase;
-    font-family: Roboto Condensed, serif;
+    text-transform: capitalize;
+    font-family: Lato Condensed, sans-serif;
     font-weight: bold;
 }
 
@@ -108,8 +108,8 @@ main > .row {
 }
 
 .navbar .navbar-brand, .navbar .nav-item {
-    text-transform: uppercase;
-    font-family: Roboto Condensed, serif;
+    text-transform: lowercase;
+    font-family: LLato Condensed, sans-serif;
 }
 
 .navbar .row { width: 100%; }
@@ -139,8 +139,8 @@ main > .row {
 
 .sidebar .sidebar-header,
 .sidebar .sidebar-section .sidebar-section-header {
-    text-transform: uppercase;
-    font-family: Roboto Condensed, serif;
+    text-transform: lowercase;
+    font-family: Lato Condensed, sans-serif;
     font-weight: bold;
 }
 
@@ -162,8 +162,8 @@ main > .row {
 }
 
 .sidebar a {
-    text-transform: uppercase;
-    font-family: Roboto Condensed, serif;
+    text-transform: lowercase;
+    font-family: Lato Condensed, sans-serif;
     color: rgba(0,0,0,0.4);
 }
 .sidebar a:hover {
@@ -324,8 +324,8 @@ main > .row {
     background-color: transparent;
 }
 .nav-tabs .nav-link {
-    text-transform: uppercase;
-    font-family: Roboto Condensed, serif;
+    text-transform: lowercase;
+    font-family: Lato Condensed, sans-serif;
 }
 
 .display-user, .display-character {
@@ -342,8 +342,8 @@ main > .row {
 .breadcrumb {
     background-color: transparent;
     padding: 0;
-    font-family: Roboto Condensed, serif;
-    text-transform: uppercase;
+    font-family: Lato Condensed, sans-serif;
+    text-transform: lowercase;
     align-items: center;
 }
 .breadcrumb a {
@@ -408,9 +408,9 @@ main > .row {
     cursor: pointer;
     padding: .3rem 1.25rem;
     font-size: .9rem;
-    font-family: Roboto Condensed, serif;
+    font-family: Lato Condensed, sans-serif;
     color: inherit;
-    text-transform: uppercase;
+    text-transform: lowercase;
 }
 .spoiler-text {
     padding: .75rem 1.25rem;
