@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Admin Routes
@@ -11,7 +13,7 @@
 
 Route::get('/', 'HomeController@getIndex');
 
-Route::get('logs', 'HomeController@getLogs');
+Route::get('admin-logs', 'HomeController@getLogs');
 Route::group(['middleware' => 'admin'], function () {
     Route::get('staff-reward-settings', 'HomeController@getStaffRewardSettings');
     Route::post('staff-reward-settings/{key}', 'HomeController@postEditStaffRewardSetting');
@@ -90,6 +92,13 @@ Route::group(['prefix' => 'themes', 'middleware' => 'power:edit_site_settings'],
     Route::post('delete/{id}', 'ThemeController@postDeleteTheme');
 });
 
+// LOG VIEWER
+Route::group(['prefix' => 'logs', 'middleware' => 'power:edit_site_settings'], function () {
+    Route::get('/', 'LogController@getIndex');
+    Route::get('/{name}', 'LogController@getLog');
+    Route::post('/delete', 'LogController@postDeleteLog');
+});
+
 // SITE IMAGES
 Route::group(['prefix' => 'images', 'middleware' => 'power:edit_site_settings'], function () {
     Route::get('/', 'FileController@getSiteImages');
@@ -112,7 +121,16 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('galleries/sort', 'GalleryController@postSortGallery');
 
     // CURRENCIES
-    Route::get('currencies', 'CurrencyController@getIndex');
+    Route::get('currency-categories', 'CurrencyController@getIndex');
+    Route::get('currency-categories/create', 'CurrencyController@getCreateCurrencyCategory');
+    Route::get('currency-categories/edit/{id}', 'CurrencyController@getEditCurrencyCategory');
+    Route::get('currency-categories/delete/{id}', 'CurrencyController@getDeleteCurrencyCategory');
+    Route::post('currency-categories/create', 'CurrencyController@postCreateEditCurrencyCategory');
+    Route::post('currency-categories/edit/{id?}', 'CurrencyController@postCreateEditCurrencyCategory');
+    Route::post('currency-categories/delete/{id}', 'CurrencyController@postDeleteCurrencyCategory');
+    Route::post('currency-categories/sort', 'CurrencyController@postSortCurrencyCategory');
+
+    Route::get('currencies', 'CurrencyController@getCurrencyIndex');
     Route::get('currencies/sort', 'CurrencyController@getSort');
     Route::get('currencies/create', 'CurrencyController@getCreateCurrency');
     Route::get('currencies/edit/{id}', 'CurrencyController@getEditCurrency');
@@ -182,9 +200,22 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::get('shops/delete/{id}', 'ShopController@getDeleteShop');
     Route::post('shops/create', 'ShopController@postCreateEditShop');
     Route::post('shops/edit/{id?}', 'ShopController@postCreateEditShop');
-    Route::post('shops/stock/{id}', 'ShopController@postEditShopStock');
     Route::post('shops/delete/{id}', 'ShopController@postDeleteShop');
     Route::post('shops/sort', 'ShopController@postSortShop');
+
+    // stock
+    // create
+    Route::get('shops/stock/{id}', 'ShopController@getCreateShopStock');
+    Route::post('shops/stock/{id}', 'ShopController@postCreateShopStock');
+    // edit
+    Route::get('shops/stock/edit/{id}', 'ShopController@getEditShopStock');
+    Route::post('shops/stock/edit/{id}', 'ShopController@postEditShopStock');
+    // delete
+    Route::get('shops/stock/delete/{id}', 'ShopController@getDeleteShopStock');
+    Route::post('shops/stock/delete/{id}', 'ShopController@postDeleteShopStock');
+    // misc
+    Route::get('shops/stock-type', 'ShopController@getShopStockType');
+    Route::get('shops/stock-cost-type', 'ShopController@getShopStockCostType');
 
     // FEATURES (TRAITS)
     Route::get('trait-categories', 'FeatureController@getIndex');
@@ -262,6 +293,15 @@ Route::group(['prefix' => 'data', 'namespace' => 'Data', 'middleware' => 'power:
     Route::post('dailies/edit/{id?}', 'DailyController@postCreateEditDaily');
     Route::post('dailies/delete/{id}', 'DailyController@postDeleteDaily');
     Route::post('dailies/sort', 'DailyController@postSortDaily'); 
+
+    // DYNAMIC LIMITS
+    Route::get('limits', 'LimitController@getIndex');
+    Route::get('limits/create', 'LimitController@getCreateLimit');
+    Route::get('limits/edit/{id}', 'LimitController@getEditLimit');
+    Route::get('limits/delete/{id}', 'LimitController@getDeleteLimit');
+    Route::post('limits/create', 'LimitController@postCreateEditLimit');
+    Route::post('limits/edit/{id?}', 'LimitController@postCreateEditLimit');
+    Route::post('limits/delete/{id}', 'LimitController@postDeleteLimit');
 });
 
 // PAGES
@@ -270,9 +310,11 @@ Route::group(['prefix' => 'pages', 'middleware' => 'power:edit_pages'], function
     Route::get('create', 'PageController@getCreatePage');
     Route::get('edit/{id}', 'PageController@getEditPage');
     Route::get('delete/{id}', 'PageController@getDeletePage');
+    Route::get('regen/{id}', 'PageController@getRegenPage');
     Route::post('create', 'PageController@postCreateEditPage');
     Route::post('edit/{id?}', 'PageController@postCreateEditPage');
     Route::post('delete/{id}', 'PageController@postDeletePage');
+    Route::post('regen/{id}', 'PageController@postRegenPage');
 });
 
 // NEWS
@@ -281,9 +323,11 @@ Route::group(['prefix' => 'news', 'middleware' => 'power:manage_news'], function
     Route::get('create', 'NewsController@getCreateNews');
     Route::get('edit/{id}', 'NewsController@getEditNews');
     Route::get('delete/{id}', 'NewsController@getDeleteNews');
+    Route::get('regen/{id}', 'NewsController@getRegenNews');
     Route::post('create', 'NewsController@postCreateEditNews');
     Route::post('edit/{id?}', 'NewsController@postCreateEditNews');
     Route::post('delete/{id}', 'NewsController@postDeleteNews');
+    Route::post('regen/{id}', 'NewsController@postRegenNews');
 });
 
 // SALES
@@ -314,6 +358,17 @@ Route::group(['prefix' => 'grants', 'namespace' => 'Users', 'middleware' => 'pow
     Route::post('items', 'GrantController@postItems');
 
     Route::get('item-search', 'GrantController@getItemSearch');
+
+    Route::get('loot-tables', 'GrantController@getLootTables');
+    Route::post('loot-tables', 'GrantController@postLootTables');
+});
+
+// TRADES
+Route::group(['prefix' => 'trades', 'middleware' => 'power:manage_submissions'], function () {
+    Route::get('{type}', 'TradeController@getTradeQueue');
+    Route::get('{id}', 'TradeController@getTradeInfo');
+    Route::get('act/{id}/{action}', 'TradeController@getTradeModal');
+    Route::post('{id}', 'TradeController@postTradeQueue');
 });
 
 // MASTERLIST
@@ -328,15 +383,11 @@ Route::group(['prefix' => 'masterlist', 'namespace' => 'Characters', 'middleware
     Route::get('transfer/act/{id}/{type}', 'CharacterController@getTransferModal');
     Route::post('transfer/{id}', 'CharacterController@postTransferQueue');
 
-    Route::get('trades/{type}', 'CharacterController@getTradeQueue');
-    Route::get('trade/{id}', 'CharacterController@getTradeInfo');
-    Route::get('trade/act/{id}/{type}', 'CharacterController@getTradeModal');
-    Route::post('trade/{id}', 'CharacterController@postTradeQueue');
-
     Route::get('create-myo', 'CharacterController@getCreateMyo');
     Route::post('create-myo', 'CharacterController@postCreateMyo');
 
     Route::get('check-subtype', 'CharacterController@getCreateCharacterMyoSubtype');
+    Route::get('get-warnings', 'CharacterController@getContentWarnings');
 });
 Route::group(['prefix' => 'character', 'namespace' => 'Characters', 'middleware' => 'power:edit_inventories'], function () {
     Route::post('{slug}/grant', 'GrantController@postCharacterCurrency');
@@ -614,5 +665,14 @@ Route::group(['prefix' => 'world',  'namespace' => 'World', 'middleware' => 'pow
     Route::post('glossary/edit/{id}', 'GlossaryController@postCreateEditTerm');
     Route::get('glossary/delete/{id}', 'GlossaryController@getDeleteTerm');
     Route::post('glossary/delete/{id}', 'GlossaryController@postDeleteTerm');
+});
 
+// LIMITS
+Route::group(['prefix' => 'limits', 'middleware' => 'power:manage_data'], function () {
+    Route::post('/', 'LimitController@postCreateEditLimits');
+});
+
+// REWARDS
+Route::group(['prefix' => 'rewards', 'middleware' => 'power:manage_data'], function () {
+    Route::post('/', 'RewardController@postPopulateRewards');
 });

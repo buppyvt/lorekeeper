@@ -34,6 +34,10 @@ class Kernel extends ConsoleKernel {
         $schedule->command('update-timed-daily')
                 ->everyMinute();          
 
+        $schedule->command('restock-shops')
+            ->daily();
+        $schedule->command('update-timed-stock')
+            ->everyMinute();
     }
 
     /**
