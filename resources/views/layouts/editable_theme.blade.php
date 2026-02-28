@@ -48,7 +48,7 @@
             filter: brightness(115%);
         }
 
-        .navbar-dark .navbar-nav .nav-link, .sidebar {
+        .navbar-dark .navbar-nav .nav-link {
             color: {{ $navTextColor }} !important;
         }
     @endif
@@ -84,7 +84,7 @@
     /** Style main background */
 
     @if ($backgroundImage || $backgroundColor || $backgroundSize)
-        #app {
+        #main {
             @if ($backgroundImage)
                 background-image: url('{{ $backgroundImage }}');
             @endif

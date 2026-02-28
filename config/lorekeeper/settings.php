@@ -36,7 +36,7 @@ return [
     | site wherever the name needs to be displayed.
     |
     */
-    'site_name'                                         => 'Pastel Nebula',
+    'site_name'                                         => 'Lorekeeper',
 
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ return [
     | It is not, however, displayed on the site itself. This should be kept short and snappy!
     |
     */
-    'site_desc'                                         => 'ARPG for Loudred species',
+    'site_desc'                                         => 'A Lorekeeper ARPG',
 
     /*
     |--------------------------------------------------------------------------
@@ -126,8 +126,8 @@ return [
     'character_number_digits'                           => 3,
     'character_pull_number'                             => 'all',
 
-    'reset_character_status_on_transfer'                => 1,
-    'reset_character_profile_on_transfer'               => 1,
+    'reset_character_status_on_transfer'                => 0,
+    'reset_character_profile_on_transfer'               => 0,
     'clear_myo_slot_name_on_approval'                   => 0,
 
     /*
@@ -154,7 +154,7 @@ return [
     | 'masterlist_image_background' => '#ffffff',
     |
     */
-    'watermark_masterlist_images'                       => 1,
+    'watermark_masterlist_images'                       => 0,
 
     'masterlist_image_dimension'                        => 0,
     'masterlist_image_dimension_target'                 => 'shorter',
@@ -224,8 +224,8 @@ return [
     |
     */
 
-    'watermark_resizing'                                => 1,
-    'watermark_percent'                                 => 0.3,
+    'watermark_resizing'                                => 0,
+    'watermark_percent'                                 => 0.9,
     'watermark_resizing_thumb'                          => 0,
 
     /*
@@ -328,7 +328,7 @@ return [
     |
     */
 
-    'allow_username_changes'                            => 1,
+    'allow_username_changes'                            => 0,
     'username_change_cooldown'                          => 30,
 
     /*
