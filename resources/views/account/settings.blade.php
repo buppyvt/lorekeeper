@@ -308,7 +308,6 @@
 @endsection
 
 @section('scripts')
-@parent
 <script>
 $( document ).ready(function() {
     $('.selectize').selectize();
