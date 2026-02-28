@@ -7,8 +7,16 @@ use App\Models\Notification;
 use App\Models\Theme;
 use App\Models\User\User;
 use App\Models\User\UserAlias;
-use App\Services\LinkService;
+use Settings;
+use File;
+use Image;
+
+use Illuminate\Support\Facades\Storage;
+use App\Models\WorldExpansion\Location;
+use App\Models\WorldExpansion\Faction;
+
 use App\Services\UserService;
+use App\Services\LinkService;
 use BaconQrCode\Renderer\Color\Rgb;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -74,10 +82,25 @@ class AccountController extends Controller {
         }
 
         $decoratorOptions = ['0' => 'Select Decorator Theme'] + Theme::where('is_active', 1)->where('theme_type', 'decorator')->where('is_user_selectable', 1)->get()->pluck('displayName', 'id')->toArray();
-
+        
+        $interval = array(
+                    0 => 'whenever',
+                    1 => 'yearly',
+                    2 => 'quarterly',
+                    3 => 'monthly',
+                    4 => 'weekly',
+                    5 => 'daily'
+                );
         return view('account.settings', [
             'themeOptions'    => $themeOptions + Auth::user()->themes()->where('theme_type', 'base')->get()->pluck('displayName', 'id')->toArray(),
             'decoratorThemes' => $decoratorOptions + Auth::user()->themes()->where('theme_type', 'decorator')->get()->pluck('displayName', 'id')->toArray(),
+            'locations' => Location::all()->where('is_user_home')->pluck('style','id')->toArray(),
+            'factions' => Faction::all()->where('is_user_faction')->pluck('style','id')->toArray(),
+            'user_enabled' => Settings::get('WE_user_locations'),
+            'user_faction_enabled' => Settings::get('WE_user_factions'),
+            'char_enabled' => Settings::get('WE_character_locations'),
+            'char_faction_enabled' => Settings::get('WE_character_factions'),
+            'location_interval' => $interval[Settings::get('WE_change_timelimit')]
         ]);
     }
 
@@ -109,7 +132,6 @@ class AccountController extends Controller {
                 flash($error)->error();
             }
         }
-
         return redirect()->back();
     }
 

@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Character\Character;
 use App\Models\Character\CharacterImage;
 use App\Models\Character\Sublist;
+
+use DB;
+use Settings;
+
 use App\Models\Currency\Currency;
 use App\Models\Gallery\Gallery;
 use App\Models\Gallery\GalleryCharacter;
@@ -75,6 +79,8 @@ class UserController extends Controller {
             'items'      => $this->user->items()->where('count', '>', 0)->orderBy('user_items.updated_at', 'DESC')->take(4)->get(),
             'characters' => $characters,
             'aliases'    => $aliases->orderBy('is_primary_alias', 'DESC')->orderBy('site')->get(),
+            'user_enabled' => Settings::get('WE_user_locations'),
+            'user_factions_enabled' => Settings::get('WE_user_factions')
         ]);
     }
 
