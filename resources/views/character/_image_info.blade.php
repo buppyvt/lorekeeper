@@ -15,7 +15,7 @@
                 <div>{!! implode(', ', $image->content_warnings) !!}</div>
             </div>
         @endif
-        <div class="card character-bio w-100 h-100">
+        <div class="card character-bio ">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
                     <li class="nav-item">
@@ -57,7 +57,6 @@
                         </div>
                         <div class="col-lg-8 col-7 pl-1">{!! $image->species_id ? $image->species->displayName : 'None' !!}</div>
                     </div>
-                @endif
                 @if($image->character->homeSetting)
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-4"><h5>Home</h5></div>

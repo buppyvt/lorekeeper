@@ -8,8 +8,13 @@
     {!! breadcrumbs(['Credits' => url('credits')]) !!}
     <h1>Credits</h1>
 
-    <div class="site-page-content parsed-text">
-        {!! $credits->parsed_text !!}
+    <div class="site-page-content parsed-text text-center">
+        <h5>Species by Buppy, Everloste, and Yesette</h5>
+        <break>
+        <break>
+        <p><b>Additional Coding, alternate themes:</b> Buppy</p>
+        <p><b>Art:</b> Buppy</p>
+        <p><b>Writing:</b> Everloste</p>
     </div>
 
     <hr>
