@@ -75,7 +75,6 @@
                         <div class="col-lg-8 col-md-6 col-8">{!! $image->character->faction ? $image->character->currentFaction : 'None' !!}{!! $character->factionRank ? ' ('.$character->factionRank->name.')' : null !!}</div>
                     </div>
                 @endif
-                
                 <div class="row no-gutters">
                     <div class="col-lg-4 col-5">
                         <h5>Rarity</h5>
