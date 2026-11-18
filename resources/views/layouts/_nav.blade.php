@@ -58,6 +58,9 @@
                         <a class="dropdown-item" href="{{ url('myos') }}">
                             MYO Slot Masterlist
                         </a>
+                        <a class="dropdown-item" href="{{ url('masterlist?character_category_id=1') }}">
+                            NPC Masterlist
+</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('world') }}">
                             Encyclopedia
